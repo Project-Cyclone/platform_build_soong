@@ -584,6 +584,11 @@ func createVariableProperties(moduleTypeProps []interface{}, productVariables in
 func createVariablePropertiesType(moduleTypeProps []interface{}, productVariables interface{}) reflect.Type {
 	typ, _ := proptools.FilterPropertyStruct(reflect.TypeOf(productVariables),
 		func(field reflect.StructField, prefix string) (bool, reflect.StructField) {
+			if strings.HasPrefix(prefix, "Product_variables.Cyclone") {
+				// Convert Product_variables.Cyclone.Foo to Cyclone.Foo
+				_, prefix = splitPrefix(prefix)
+			}
+
 			// Filter function, returns true if the field should be in the resulting struct
 			if prefix == "" {
 				// Keep the top level Product_variables field
